@@ -22,7 +22,7 @@ Install:
 
 - Mac/Linux users
     - open up your terminal/console app
-    - use `cd` to get to the folder where you want this project ([tutorial on how to use cd here](https://github.com/jeff-hykin/fornix/blob/b6fd3313beda4f80b7051211cb790a4f34da590a/documentation/images/cd_tutorial.gif))
+    - use `cd` to get to the folder where you want this project ([tutorial on how to use cd here](https://github.com/YousefRajeh/CS-220P/blob/main/Project%201%20(Pacman)/documentation/images/cd_tutorial.gif))
     - (If you get errors on the next step -> keep reading)
     - Type this inside your terminal/console <br>`repo=https://github.com/jeff-hykin/berkeley_pacman eval "$(curl -fsSL git.io/JE2Zm || wget -qO- git.io/JE2Zm)"`<br>[press enter]
     - Possible errors:

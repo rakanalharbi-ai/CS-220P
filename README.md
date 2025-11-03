@@ -21,8 +21,8 @@ We recommend using Visual Studio Code as an IDE.
 If you want to use a different operating system or IDE, you will have to port parts of the code yourself.
 
 
-## Contact
+## Contact Information
 
 Yousef Rajeh: yousef.rajeh@kaust.edu.sa <br />
-Reem *Fill out your info* <br />
-Omar *Fill out your info* <br />
+Reem Alghamdi: reem.alghamdi@kaust.edu.sa <br />
+Omar Facio: omar.mena@kaust.edu.sa  <br />

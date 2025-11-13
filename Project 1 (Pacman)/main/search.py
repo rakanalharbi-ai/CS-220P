@@ -20,6 +20,8 @@ Pacman agents (in search_agents.py).
 from builtins import object
 import util
 import os
+from util import Stack, Queue, PriorityQueue
+
 
 def tiny_maze_search(problem):
     """
@@ -62,19 +64,79 @@ def depth_first_search(problem):
     #     path_cost = problem.get_cost_of_actions(example_path)
     #     return example_path
     
-    util.raise_not_defined()
+    stack = Stack()
+    start = problem.get_start_state()
+    stack.push((start, []))
+    visited = set()
+
+    while not stack.is_empty():
+        state, path = stack.pop()
+
+        if state in visited:
+            continue
+        visited.add(state)
+
+        if problem.is_goal_state(state):
+            return path
+
+        for succ, action, cost in problem.get_successors(state):
+            if succ not in visited:
+                stack.push((succ, path + [action]))
+
+    return []
 
 
 def breadth_first_search(problem):
     """Search the shallowest nodes in the search tree first."""
     "*** YOUR CODE HERE ***"
-    util.raise_not_defined()
+    queue = Queue()
+    start = problem.get_start_state()
+    queue.push((start, []))
+    visited = set()
+
+    while not queue.is_empty():
+        state, path = queue.pop()
+
+        if state in visited:
+            continue
+        visited.add(state)
+
+        if problem.is_goal_state(state):
+            return path
+
+        for succ, action, cost in problem.get_successors(state):
+            if succ not in visited:
+                queue.push((succ, path + [action]))
+
+    return []
 
 
 def uniform_cost_search(problem, heuristic=None):
     """Search the node of least total cost first."""
     "*** YOUR CODE HERE ***"
-    util.raise_not_defined()
+    pq = PriorityQueue()
+    start = problem.get_start_state()
+    pq.push((start, [], 0), 0)
+
+    best_cost = {start: 0}
+
+    while not pq.is_empty():
+        state, path, cost_so_far = pq.pop()
+
+        if problem.is_goal_state(state):
+            return path
+
+        if cost_so_far > best_cost.get(state, float("inf")):
+            continue
+
+        for succ, action, step_cost in problem.get_successors(state):
+            new_cost = cost_so_far + step_cost
+
+            if new_cost < best_cost.get(succ, float("inf")):
+                best_cost[succ] = new_cost
+                pq.push((succ, path + [action], new_cost), new_cost)
+
+    return []
 
 
 # 
@@ -100,7 +162,7 @@ def your_heuristic(state, problem=None):
         
         # YOUR CODE HERE (set value of optimisitic_number_of_steps_to_goal)
         
-        optimisitic_number_of_steps_to_goal = 0
+        optimisitic_number_of_steps_to_goal = abs(pacman_x - goal_x) + abs(pacman_y - goal_y)
         return optimisitic_number_of_steps_to_goal
     # 
     # traveling-salesman problem (collect multiple food pellets)
@@ -112,8 +174,17 @@ def your_heuristic(state, problem=None):
         
         # YOUR CODE HERE (set value of optimisitic_number_of_steps_to_goal)
         
-        optimisitic_number_of_steps_to_goal = 0
+        food_positions = food_grid.as_list()
+        if not food_positions:
+            optimisitic_number_of_steps_to_goal = 0
+        else:
+            optimisitic_number_of_steps_to_goal = min(
+                abs(pacman_x - fx) + abs(pacman_y - fy)
+                for fx, fy in food_positions
+            )
         return optimisitic_number_of_steps_to_goal
+    manhattanHeuristic = your_heuristic
+
 
 def a_star_search(problem, heuristic=your_heuristic):
     """Search the node that has the lowest combined cost and heuristic first."""
@@ -127,7 +198,31 @@ def a_star_search(problem, heuristic=your_heuristic):
     #     priority = depth + heuristic(state, problem)
     #
     
-    util.raise_not_defined()
+    pq = PriorityQueue()
+    start = problem.get_start_state()
+    start_cost = 0
+    pq.push((start, [], start_cost), start_cost + heuristic(start, problem))
+
+    best_cost = {start: 0}
+
+    while not pq.is_empty():
+        state, path, cost_so_far = pq.pop()
+
+        if problem.is_goal_state(state):
+            return path
+
+        if cost_so_far > best_cost.get(state, float("inf")):
+            continue
+
+        for succ, action, step_cost in problem.get_successors(state):
+            new_cost = cost_so_far + step_cost
+            est = new_cost + heuristic(succ, problem)
+
+            if new_cost < best_cost.get(succ, float("inf")):
+                best_cost[succ] = new_cost
+                pq.push((succ, path + [action], new_cost), est)
+
+    return []
 
 
 # (you can ignore this, although it might be helpful to know about)

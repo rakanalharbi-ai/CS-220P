@@ -183,7 +183,7 @@ def your_heuristic(state, problem=None):
                 for fx, fy in food_positions
             )
         return optimisitic_number_of_steps_to_goal
-    manhattanHeuristic = your_heuristic
+manhattanHeuristic = your_heuristic
 
 
 def a_star_search(problem, heuristic=your_heuristic):
